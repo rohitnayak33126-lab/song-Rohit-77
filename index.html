@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PALGI BAR DJ SONG</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:20px 12px;
+ background:linear-gradient(140deg,#100020,#32004f,#090919);
+ color:white;font-family:Arial;text-align:center;
+}
+h1{color:#ffce35;font-size:36px;text-shadow:0 0 15px orange}
+.player{
+ max-width:440px;margin:20px auto;padding:22px;
+ background:#ffffff12;border:1px solid #9d56ff;
+ border-radius:25px;box-shadow:0 0 30px #8c28ff55;
+}
+.cover{
+ width:100%;height:230px;object-fit:cover;
+ border-radius:18px;
+}
+h2{color:#ffce35}
+button{
+ padding:13px 19px;margin:6px;
+ border:0;border-radius:30px;
+ background:#ffce35;color:#170a25;
+ font-weight:bold;font-size:15px;cursor:pointer;
+}
+button:active{transform:scale(.96)}
+input{width:85%;accent-color:#ffce35}
+.lyrics{
+ white-space:pre-line;line-height:2;
+ text-align:center;background:#0005;
+ border-radius:15px;padding:17px;margin-top:20px;
+}
+.status{color:#8dffb0;font-weight:bold}
+.small{color:#ccc;font-size:13px}
+</style>
+</head>
+<body>
+
+<h1>🔥 PALGI BAR 🔥</h1>
+<p>DJ REMIX • HINDI SONG • MUSIC</p>
+
+<div class="player">
+
+<img class="cover"
+src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800"
+alt="DJ Music">
+
+<h2>🎵 PALGI BAR 🎵</h2>
+<p>Original Hindi DJ Song</p>
+
+<p class="status" id="status">अपना गाना सुनने के लिए Play दबाएँ</p>
+
+<button onclick="playSong()">▶ PLAY</button>
+<button onclick="pauseSong()">⏸ PAUSE</button>
+<button onclick="stopSong()">⏹ STOP</button>
+
+<p>🔊 DJ बीट की आवाज़</p>
+<input type="range" min="0" max="100" value="45"
+oninput="setVolume(this.value)">
+
+<div class="lyrics" id="lyrics">
+🎤 PALGI BAR - हिंदी गाना
+
+[इंट्रो]
+
+आज की रात है मस्तानी,
+चल रही अपनी मनमानी,
+डीजे पर जब बीट बजे,
+झूमे सारी दुनिया दीवानी।
+
+[मुखड़ा]
+
+पालगी बार, पालगी बार,
+आज मचेगा बड़ा धमाल,
+दिल में जोश और आँखों में ख्वाब,
+नाचेंगे हम सारी रात।
+
+पालगी बार, पालगी बार,
+अपना अलग है ये अंदाज,
+बीट बजे तो पैर ना रुकें,
+आज करेंगे सबको हैरान।
+
+[अंतरा 1]
+
+चाँद भी देखे अपनी अदा,
+सितारे बोलें वाह-वाह,
+दोस्तों के संग मस्ती छाई,
+खुशियों ने महफिल सजाई।
+
+रंग बिरंगी रात निराली,
+धुन है अपनी सबसे प्यारी,
+हाथ उठाकर साथ में बोलो,
+आज की रात है अपनी सारी।
+
+[मुखड़ा]
+
+पालगी बार, पालगी बार,
+आज मचेगा बड़ा धमाल,
+दिल में जोश और आँखों में ख्वाब,
+नाचेंगे हम सारी रात।
+
+[अंतरा 2]
+
+दिल में सपने लाखों लेकर,
+चलते जाएँ आगे बढ़कर,
+हार कभी हम मानेंगे ना,
+अपना रास्ता छोड़ेंगे ना।
+
+ढोल बजे और नगाड़ा बाजे,
+सारी दुनिया साथ में नाचे,
+अपनी धुन पर झूमे जमाना,
+आज नहीं है घर को जाना।
+
+[रैप]
+
+अरे सुन भाई, बीट बजा,
+अपना वाला गाना लगा,
+PALGI BAR का नाम है प्यारा,
+छा जाएगा आज नजारा।
+
+अपनी मस्ती, अपनी शान,
+दिल से करते सबका मान,
+हाथ उठाओ, शोर मचाओ,
+PALGI BAR सबको सुनाओ!
+
+[अंतिम मुखड़ा]
+
+पालगी बार, पालगी बार,
+याद रहेगा अपना नाम,
+दिल से गाओ, झूमते जाओ,
+खुशियों से भर दो हर शाम।
+
+पालगी बार, पालगी बार,
+अपना अलग है अंदाज,
+गाना खत्म हो जाए लेकिन,
+दिल में गूँजे इसकी आवाज!
+
+🎵 PALGI BAR 🎵
+</div>
+
+<p class="small">
+नोट: हिंदी आवाज़ आपके ब्राउज़र में उपलब्ध Hindi Voice पर निर्भर करेगी।
+</p>
+</div>
+
+<script>
+let audioCtx=null;
+let master=null;
+let beatTimer=null;
+let beatStep=0;
+let playing=false;
+let paused=false;
+let volume=.45;
+
+const lyricsText = [
+"आज की रात है मस्तानी, चल रही अपनी मनमानी, डीजे पर जब बीट बजे, झूमे सारी दुनिया दीवानी।",
+"पालगी बार, पालगी बार, आज मचेगा बड़ा धमाल, दिल में जोश और आँखों में ख्वाब, नाचेंगे हम सारी रात। पालगी बार, पालगी बार, अपना अलग है ये अंदाज, बीट बजे तो पैर ना रुकें, आज करेंगे सबको हैरान।",
+"चाँद भी देखे अपनी अदा, सितारे बोलें वाह-वाह, दोस्तों के संग मस्ती छाई, खुशियों ने महफिल सजाई। रंग बिरंगी रात निराली, धुन है अपनी सबसे प्यारी, हाथ उठाकर साथ में बोलो, आज की रात है अपनी सारी।",
+"पालगी बार, पालगी बार, आज मचेगा बड़ा धमाल, दिल में जोश और आँखों में ख्वाब, नाचेंगे हम सारी रात।",
+"दिल में सपने लाखों लेकर, चलते जाएँ आगे बढ़कर, हार कभी हम मानेंगे ना, अपना रास्ता छोड़ेंगे ना। ढोल बजे और नगाड़ा बाजे, सारी दुनिया साथ में नाचे, अपनी धुन पर झूमे जमाना, आज नहीं है घर को जाना।",
+"अरे सुन भाई, बीट बजा, अपना वाला गाना लगा, PALGI BAR का नाम है प्यारा, छा जाएगा आज नजारा। अपनी मस्ती, अपनी शान, दिल से करते सबका मान, हाथ उठाओ, शोर मचाओ, PALGI BAR सबको सुनाओ!",
+"पालगी बार, पालगी बार, याद रहेगा अपना नाम, दिल से गाओ, झूमते जाओ, खुशियों से भर दो हर शाम। पालगी बार, पालगी बार, अपना अलग है अंदाज, गाना खत्म हो जाए लेकिन, दिल में गूँजे इसकी आवाज!"
+];
+
+let currentPart=0;
+
+function setupAudio(){
+ if(audioCtx) return;
+ audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+ master=audioCtx.createGain();
+ master.gain.value=volume;
+ master.connect(audioCtx.destination);
+}
+
+function setVolume(v){
+ volume=Number(v)/100;
+ if(master) master.gain.value=volume;
+}
+
+function kick(){
+ const osc=audioCtx.createOscillator();
+ const gain=audioCtx.createGain();
+ osc.type="sine";
+ osc.frequency.setValueAtTime(150,audioCtx.currentTime);
+ osc.frequency.exponentialRampToValueAtTime(45,audioCtx.currentTime+.15);
+ gain.gain.setValueAtTime(.8,audioCtx.currentTime);
+ gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.2);
+ osc.connect(gain);gain.connect(master);
+ osc.start();osc.stop(audioCtx.currentTime+.21);
+}
+
+function snare(){
+ const buffer=audioCtx.createBuffer(1,audioCtx.sampleRate*.12,audioCtx.sampleRate);
+ const data=buffer.getChannelData(0);
+ for(let i=0;i<data.length;i++) data[i]=Math.random()*2-1;
+ const src=audioCtx.createBufferSource();
+ src.buffer=buffer;
+ const filter=audioCtx.createBiquadFilter();
+ filter.type="highpass";filter.frequency.value=1200;
+ const gain=audioCtx.createGain();
+ gain.gain.setValueAtTime(.22,audioCtx.currentTime);
+ gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.12);
+ src.connect(filter);filter.connect(gain);gain.connect(master);
+ src.start();
+}
+
+function hat(){
+ const buffer=audioCtx.createBuffer(1,audioCtx.sampleRate*.04,audioCtx.sampleRate);
+ const data=buffer.getChannelData(0);
+ for(let i=0;i<data.length;i++) data[i]=Math.random()*2-1;
+ const src=audioCtx.createBufferSource();
+ src.buffer=buffer;
+ const filter=audioCtx.createBiquadFilter();
+ filter.type="highpass";filter.frequency.value=7000;
+ const gain=audioCtx.createGain();
+ gain.gain.value=.07;
+ src.connect(filter);filter.connect(gain);gain.connect(master);
+ src.start();
+}
+
+function startBeat(){
+ if(beatTimer) return;
+ beatStep=0;
+ beatTimer=setInterval(()=>{
+  if(!playing) return;
+  if(beatStep%4===0) kick();
+  if(beatStep%8===4) snare();
+  hat();
+  beatStep++;
+ },250);
+}
+
+function stopBeat(){
+ clearInterval(beatTimer);
+ beatTimer=null;
+}
+
+function speakPart(){
+ if(!playing || currentPart>=lyricsText.length){
+  if(currentPart>=lyricsText.length) finishSong();
+  return;
+ }
+
+ const utterance=new SpeechSynthesisUtterance(lyricsText[currentPart]);
+ utterance.lang="hi-IN";
+ utterance.rate=.88;
+ utterance.pitch=1.05;
+ utterance.volume=1;
+
+ utterance.onend=()=>{
+  if(!playing)return;
+  currentPart++;
+  speakPart();
+ };
+
+ utterance.onerror=()=>{
+  document.getElementById("status").innerText=
+  "हिंदी आवाज़ में समस्या हुई।";
+  stopSong();
+ };
+
+ speechSynthesis.speak(utterance);
+}
+
+async function playSong(){
+ setupAudio();
+ await audioCtx.resume();
+
+ if(playing && paused){
+  speechSynthesis.resume();
+  paused=false;
+  playing=true;
+  startBeat();
+  document.getElementById("status").innerText="🔥 गाना फिर से चल रहा है!";
+  return;
+ }
+
+ if(playing)return;
+
+ playing=true;
+ paused=false;
+ startBeat();
+
+ if(currentPart===0) speechSynthesis.cancel();
+
+ document.getElementById("status").innerText="🎤 PALGI BAR चल रहा है!";
+ speakPart();
+}
+
+function pauseSong(){
+ if(!playing)return;
+ playing=false;
+ paused=true;
+ speechSynthesis.pause();
+ stopBeat();
+ document.getElementById("status").innerText="⏸ गाना रोक दिया गया है";
+}
+
+function stopSong(){
+ playing=false;
+ paused=false;
+ currentPart=0;
+ speechSynthesis.cancel();
+ stopBeat();
+ document.getElementById("status").innerText="⏹ गाना बंद है";
+}
+
+function finishSong(){
+ playing=false;
+ paused=false;
+ currentPart=0;
+ stopBeat();
+ document.getElementById("status").innerText="🎵 PALGI BAR समाप्त हुआ!";
+}
+</script>
+
+</body>
+</html>
